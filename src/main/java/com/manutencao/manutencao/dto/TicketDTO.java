@@ -49,11 +49,11 @@ public class TicketDTO {
 		StatusManutencao = entity.getStatusManutencao();
 		statusAtual = entity.getStatusAtual();
 		prioridade = entity.getPrioridade();
-		discricaoDoProblema = getDiscricaoDoProblema();
+		discricaoDoProblema = entity.getDiscricaoDoProblema();
 		tipoDeManutencao = entity.getTipoDeManutencao();
 		dataDeCriacao = entity.getDataDeCriacao();
 		dataDeTermino = entity.getDataDeTermino();
-		active = true;
+		active = entity.getActive();
 	
 	}
 	

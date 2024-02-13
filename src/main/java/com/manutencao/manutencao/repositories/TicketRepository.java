@@ -10,5 +10,5 @@ import com.manutencao.manutencao.entities.Ticket;
 @Repository
 public interface TicketRepository extends JpaRepository<Ticket, Long> {
 	@Query("SELECT t FROM Ticket t WHERE t.active = true")
-	List<Ticket> findActiveTicket();
+	List<Ticket> findallActiveTicket();
 }

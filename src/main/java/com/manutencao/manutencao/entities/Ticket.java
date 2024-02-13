@@ -66,6 +66,6 @@ public class Ticket implements Serializable {
 		this.dataDeCriacao = dataDeCriacao;
 		this.dataDeTermino = dataDeTermino;
 		this.manutentor = manutentor;
-		this.active = active;
+		this.active = true;
 	}
 }

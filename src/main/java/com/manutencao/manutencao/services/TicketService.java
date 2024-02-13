@@ -1,6 +1,8 @@
 package com.manutencao.manutencao.services;
 
+import java.time.Instant;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -30,11 +32,11 @@ public class TicketService {
 	}
 	/*Busca apenas os tickets ativos*/
 	@Transactional(readOnly = true)
-	public List<TicketDTO> findByActiveTicket (TicketDTO dto) {
-		List<Ticket> listTicket = repository.findActiveTicket();
+	public List<TicketDTO> findByActiveTicket() {
+		List<Ticket> listTicket = repository.findallActiveTicket();
 		return listTicket.stream().map(x -> new TicketDTO(x)).toList();
-		
 	}
+	
 	/* metodo para retorna uma lista paginada dos tickts*/
 	@Transactional(readOnly = true)
 	public Page<TicketDTO> findByAll (Pageable pageable){
@@ -44,14 +46,13 @@ public class TicketService {
 	
 	/* esse motodo desativa o ticket no luga de deleta direto*/
 	@Transactional
-	public TicketDTO softDelete (Long id, TicketDTO dto) {
-		Ticket entity = repository.getReferenceById(id);
-		entity.setActive(dto.getActive());
-		entity = repository.save(entity);
-		return new TicketDTO(entity);
-		
+	public void softDelete (Long id) {
+		Optional<Ticket> entity = repository.findById(id);
+		if (entity.isPresent()) {
+			Ticket ticket = entity.get();
+			ticket.setActive(false);
+		}
 	}
-	
 	
 	@Transactional
 	public TicketDTO insert(TicketDTO dto) {
@@ -66,9 +67,8 @@ public class TicketService {
 		entity.setDepartamento(dto.getDepartamento());
 		entity.setPrioridade(dto.getPrioridade());
 		entity.setDiscricaoDoProblema(dto.getDiscricaoDoProblema());
-		entity.setDataDeCriacao(dto.getDataDeCriacao());
+		entity.setDataDeCriacao(Instant.now());
+		entity.setActive(true);
 		entity = repository.save(entity);
-		
 	}
-}
-	
+}	
