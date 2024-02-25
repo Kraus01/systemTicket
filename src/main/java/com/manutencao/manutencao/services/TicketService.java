@@ -22,6 +22,9 @@ public class TicketService {
 	TicketRepository repository;
 	@Autowired
 	manutentorRepository manutentorRepository;
+	@Autowired 
+	EmailNotificationService emailNotificationService;
+	
 	
 	
 	/* busca um ticket pela pelo id, e preciso trata a exception*/
@@ -57,12 +60,13 @@ public class TicketService {
 	@Transactional
 	public TicketDTO insert(TicketDTO dto) {
 		Ticket entity = new Ticket();
-		CopiaTicketDTO(dto, entity);
+		CopyTicketDTO(dto, entity);
+		
 		return new TicketDTO(entity);
 	}
 	
 	//Metodo para receber os dados do DTO e grava na entidade
-	private void CopiaTicketDTO (TicketDTO dto, Ticket entity) {
+	private void CopyTicketDTO (TicketDTO dto, Ticket entity) {
 		entity.setSolicitante(dto.getSolicitante());
 		entity.setDepartamento(dto.getDepartamento());
 		entity.setPrioridade(dto.getPrioridade());
@@ -70,5 +74,7 @@ public class TicketService {
 		entity.setDataDeCriacao(Instant.now());
 		entity.setActive(true);
 		entity = repository.save(entity);
+		emailNotificationService.notifyNewTicketCreated(entity);
 	}
+	
 }	
